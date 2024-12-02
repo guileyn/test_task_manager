@@ -1,11 +1,11 @@
 import sys
-from PyQt5.QtCore import QStringListModel
-from PyQt5.QtWidgets import (
+from PySide6.QtCore import Qt, QStringListModel
+from PySide6.QtWidgets import (
     QApplication, QWidget, QTabWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QLineEdit, QListView, QComboBox, QCheckBox
 )
-from PyQt5.QtChart import QChart, QChartView, QPieSeries, QBarSeries, QBarSet
-from PyQt5.QtGui import QPainter
+from PySide6.QtCharts import QChart, QChartView, QPieSeries, QBarSeries, QBarSet
+from PySide6.QtGui import QPainter
 from insights import calculate_average_task_completion_time, calculate_priority_based_time_distribution, calculate_weekly_monthly_trends
 from database import create_connection, select_all_tasks, insert_task, delete_task
 
@@ -191,7 +191,7 @@ class TaskManagerGUI(QWidget):
     def on_checkbox_toggled(self):
         if self.theme_checkbox.isChecked():
             # Apply dark mode theme to entire application, including tabs
-            self.setStyleSheet("""
+            self.setStyleSheet(""" 
                 QWidget { background-color: #2b2b2b; color: white; }
                 QTabWidget { background-color: #2b2b2b; color: white; }
                 QTabBar::tab { background-color: #555555; color: white; padding: 10px; }
@@ -216,43 +216,23 @@ class TaskManagerGUI(QWidget):
                 QComboBox { background-color: white; color: black; border: 1px solid #ccc; }
                 QLineEdit { background-color: white; color: black; border: 1px solid #ccc; }
             """)
-            self.result_label.setText("Dark Mode is OFF")
-    
+            self.result_label.setText("Light Mode is ON")
+
     def settings_tab(self):
-        
         self.settings_widget = QWidget()
         settings_layout = QVBoxLayout()
         self.settings_widget.setLayout(settings_layout)
 
-        # Theme setting
-        self.theme_checkbox = QCheckBox("Enable Dark Theme")
-        self.theme_checkbox.setChecked(False)
-        self.theme_checkbox.toggled.connect(self.on_checkbox_toggled)  # Connect to function
+        self.theme_checkbox = QCheckBox("Enable Dark Mode")
+        self.theme_checkbox.toggled.connect(self.on_checkbox_toggled)
         settings_layout.addWidget(self.theme_checkbox)
-        
-        self.result_label = QLabel('Dark Mode is OFF', self)
+
+        self.result_label = QLabel("Light Mode is ON")
         settings_layout.addWidget(self.result_label)
 
 
-        # Default priority setting
-        priority_label = QLabel("Default Priority")
-        self.default_priority_dropdown = QComboBox()
-        self.default_priority_dropdown.addItems(["High", "Medium", "Low"])
-        settings_layout.addWidget(priority_label)
-        settings_layout.addWidget(self.default_priority_dropdown)
-
-        # Default category setting
-        category_label = QLabel("Default Category")
-        self.default_category_dropdown = QComboBox()
-        self.default_category_dropdown.addItems(["Work", "Personal", "Other"])
-        settings_layout.addWidget(category_label)
-        settings_layout.addWidget(self.default_category_dropdown)
-
-def main():
-    app = QApplication(sys.argv)
-    ex = TaskManagerGUI()
-    ex.show()
-    sys.exit(app.exec_())
-
 if __name__ == '__main__':
-    main()
+    app = QApplication(sys.argv)
+    window = TaskManagerGUI()
+    window.show()
+    sys.exit(app.exec())
