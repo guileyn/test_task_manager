@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QLabel
 )
 from PySide6.QtCharts import QChart, QChartView, QPieSeries, QBarSeries, QBarSet
-from insights import calculate_average_task_completion_time, calculate_priority_based_time_distribution, calculate_weekly_monthly_trends
+from insights import calculate_average_task_completion_time, calculate_average_task_completion_days_before_deadline, calculate_priority_based_time_distribution, calculate_weekly_monthly_trends
 
 def performance_insights_tab(gui_instance):
     insights_widget = QWidget()
@@ -14,6 +14,11 @@ def performance_insights_tab(gui_instance):
     average_time = calculate_average_task_completion_time(gui_instance.tasks)
     average_time_label = QLabel(f"Average Task Completion Time: {average_time} days")
     insights_layout.addWidget(average_time_label)
+
+    # Average Number of Days Completed Before Deadline
+    average_days = calculate_average_task_completion_days_before_deadline(gui_instance.tasks)
+    average_days_label = QLabel(f"Average Number of Days Completed Before Deadline: {-average_days} days")
+    insights_layout.addWidget(average_days_label)
 
     # Priority-Based Time Distribution
     priority_time = calculate_priority_based_time_distribution(gui_instance.tasks)

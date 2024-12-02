@@ -14,14 +14,15 @@ def create_connection():
 def create_tables(conn):
     tasks_table = """
         CREATE TABLE IF NOT EXISTS tasks (
-            id integer PRIMARY KEY,
-            title text NOT NULL UNIQUE,
-            description text,
-            category text,
-            priority text,
+            id INTEGER PRIMARY KEY,
+            title TEXT NOT NULL UNIQUE,
+            description TEXT,
+            category TEXT,
+            priority TEXT,
             deadline DATE,
-            completed integer,
-            completed_date DATE
+            completed INTEGER,
+            completed_date DATE,
+            creation_date DATE
         );
     """
     try:
@@ -31,24 +32,23 @@ def create_tables(conn):
     except Error as e:
         print(f"Error creating table: {e}")
 
-
 def insert_task(conn, task):
     sql = '''
-        INSERT INTO tasks(title, description, category, priority, deadline, completed, completed_date)
-        VALUES(?,?,?,?,?,0,0);
+        INSERT INTO tasks(title, description, category, priority, deadline, completed, completed_date, creation_date)
+        VALUES(?,?,?,?,?,0,0,DATE('now'));
     '''
     try:
         c = conn.cursor()
         c.execute(sql, task)
         conn.commit()
+        print(f"Task '{task[0]}' inserted with creation date.")
         return c.lastrowid
     except sqlite3.IntegrityError as e:  # Catch IntegrityError, which happens on UNIQUE constraint violation
         print(f"Error: A task with the title '{task[0]}' already exists.")
-        return None  # You can return None or handle it in any other way
+        return None
     except Error as e:
         print(f"Error inserting task: {e}")
         return None
-
 
 def select_all_tasks(conn):
     sql = "SELECT * FROM tasks"
@@ -56,7 +56,6 @@ def select_all_tasks(conn):
         c = conn.cursor()
         c.execute(sql)
         rows = c.fetchall()
-        print(rows)
         return rows
     except Error as e:
         print(e)

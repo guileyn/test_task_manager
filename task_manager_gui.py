@@ -67,6 +67,20 @@ class TaskManagerGUI(QWidget):
         self.settings_tab()
         self.tabs.addTab(self.settings_widget, "Settings")
 
+        self.tabs.currentChanged.connect(self.on_tab_changed)
+
+    def on_tab_changed(self, index):
+        """Reload the content of the selected tab when the tab is changed."""
+        tab_name = self.tabs.tabText(index)
+        if tab_name == "Performance Insights":
+            print("changed")
+            self.reload_performance_insights_tab()
+
+    def reload_performance_insights_tab(self):
+        """Reload the Performance Insights tab."""
+        self.insights_widget.layout().deleteLater()  # Delete the existing layout
+        self.performance_insights_tab()  # Recreate the Performance Insights tab layout
+
     def update_task_list(self):
         self.tasks = select_all_tasks(self.conn)  # Refresh the task list from the database
         task_titles = []

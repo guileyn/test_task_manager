@@ -9,12 +9,27 @@ def calculate_average_task_completion_time(tasks):
     completed_tasks = 0
     for task in tasks:
         if task[6] == 1:  # Task is completed
-            start_date = datetime.datetime.strptime(task[5], '%m/%d/%Y')
-            completion_date = datetime.datetime.today()  # Assuming no separate completion date
+            start_date = datetime.datetime.strptime(task[8], '%Y-%m-%d')
+            completion_date = datetime.datetime.strptime(task[7], '%Y-%m-%d %H:%M:%S.%f')
             completion_time = completion_date - start_date
             total_time += completion_time.days
             completed_tasks += 1
+    print(f"Total time: {total_time} Completed tasks: {completed_tasks}")
     return total_time / completed_tasks if completed_tasks > 0 else 0
+
+def calculate_average_task_completion_days_before_deadline(tasks):
+    # for completed task, calculate the number of days between the completion date and the deadline, divide by number of completed tasks
+    total_days_before_deadline = 0
+    completed_tasks = 0
+    for task in tasks:
+        if task[6] == 1:  # Task is completed
+            deadline_date = datetime.datetime.strptime(task[5], '%m/%d/%Y')
+            completion_date = datetime.datetime.strptime(task[7], '%Y-%m-%d %H:%M:%S.%f')
+            time = completion_date - deadline_date
+            total_days_before_deadline += time.days
+            completed_tasks += 1
+    # print(f"Total Days Before Deadline: {total_days_before_deadline} Completed tasks: {completed_tasks}")
+    return total_days_before_deadline / completed_tasks if completed_tasks > 0 else 0
 
 def calculate_priority_based_time_distribution(tasks):
     priority_time = {"high": 0, "medium": 0, "low": 0}
