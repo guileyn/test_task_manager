@@ -1,4 +1,6 @@
 # task_operations.py
+from database import insert_task
+
 def update_task_list(tasks):
     task_titles = [f"{task[1]} {task[2]} {task[3]} {task[4]} {task[5]}" for task in tasks]  # task[1]: title, task[4]: priority
     tasks_model.setStringList(task_titles)
