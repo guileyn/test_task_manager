@@ -34,7 +34,7 @@ def home_tab(gui_instance):
     add_button = QPushButton('Add Task')
     add_button.clicked.connect(gui_instance.add_task)
     update_button = QPushButton('Update Task')
-    update_button.clicked.connect(gui_instance.update_task_gui)
+    #update_button.clicked.connect(gui_instance.update_task_gui)
     delete_button = QPushButton('Delete Task')
     delete_button.clicked.connect(gui_instance.delete_task)
     buttons_layout.addWidget(add_button)
